@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -11,7 +12,7 @@ using TempFolder;
 
 namespace AudioTransfer.Logic {
     public class Processor {
-        private const string PROCESSED_FILENAME = "processed.txt";
+        private const string PROCESSED_FILENAME = "join.txt";
         
         private readonly ProcessorConfig _config;
         private readonly FtpSender _ftpSender;
@@ -28,7 +29,7 @@ namespace AudioTransfer.Logic {
             
             var directories = Directory.GetDirectories(source).Select(d => new FileInfo(d));
 
-            await Task.WhenAll(directories.AsParallel().Select(async directory => {
+            await Task.WhenAll(directories.Select(async directory => {
                 await slim.WaitAsync();
 
                 try {
@@ -37,13 +38,13 @@ namespace AudioTransfer.Logic {
                     }
 
                     using var tempFolder = TempFolderFactory.Create();
-                    var outputFile = Path.Combine(tempFolder.Path, directory.Name + "." + _fFmpegWrapper.Config.OutputExtension.ToLower());
+                    var extension = _fFmpegWrapper.Config.OutputExtension;
+                    var outputFile = Path.Combine(tempFolder.Path, $"{directory.Name}_{extension.ToUpper()}WRAP.{extension.ToLower()}");
                 
                     if (await _fFmpegWrapper.Convert(filesToProcess, outputFile)) {
-                        var ftpDestination = Path.Combine(destination, directory.Name, Path.GetFileName(outputFile));
+                        var ftpDestination = Path.Combine(destination, Path.GetFileName(outputFile));
                         if (await _ftpSender.Send(ftpDestination, outputFile)) {
-                            ConsoleHelper.Success($"{directory.Name} сохранен в ftp://{Path.Combine(_ftpSender.Config.FtpServer, ftpDestination)}");
-                            CompleteProcess(directory);
+                            ConsoleHelper.Success($"{directory.Name} сохранен в {new Uri(new Uri("ftp://" + _ftpSender.Config.FtpServer), ftpDestination)}");
                         }
                     } else {
                         ConsoleHelper.Error($"Не удалось обработать файлы в директории {directory}");
@@ -54,17 +55,6 @@ namespace AudioTransfer.Logic {
             }));
         }
 
-        /// <summary>
-        /// Создание файлы, что бы понимать, что директория уже обработана и повторная обработка не требуется
-        /// </summary>
-        /// <param name="directory"></param>
-        private static void CompleteProcess(FileSystemInfo directory) {
-            var processed = Path.Combine(directory.FullName, PROCESSED_FILENAME);
-            if (!File.Exists(processed)) {
-                File.Create(processed);
-            }
-        }
-        
         /// <summary>
         /// Проверка на необходимость проверки директории
         /// </summary>
@@ -81,10 +71,20 @@ namespace AudioTransfer.Logic {
                 return false;
             }
 
-            if (inputFiles.Any(f => new FileInfo(f).Name == PROCESSED_FILENAME)) {
-                ConsoleHelper.Warn($"Директория {directory.FullName} содержит файл {PROCESSED_FILENAME}. Пропускаем");
+            if (inputFiles.All(f => new FileInfo(f).Name != PROCESSED_FILENAME)) {
+                ConsoleHelper.Warn($"Директория {directory.FullName} не содержит файл {PROCESSED_FILENAME}. Пропускаем");
                 return false;
             }
+
+            inputFiles = inputFiles.Where(f => new FileInfo(f).Name != PROCESSED_FILENAME).ToList();
+
+            var badNameFile = inputFiles.FirstOrDefault(f => !int.TryParse(Path.GetFileNameWithoutExtension(f), out _));
+            if (badNameFile != null) {
+                ConsoleHelper.Warn($"Директория {directory.FullName} содержит файл {badNameFile}, который невозможно отсортировать. Пропускаем");
+                return false;
+            }
+
+            inputFiles = inputFiles.OrderBy(f => int.Parse(Path.GetFileNameWithoutExtension(f))).ToList();
 
             return true;
         }

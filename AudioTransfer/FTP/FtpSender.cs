@@ -16,13 +16,11 @@ namespace AudioTransfer.FTP {
             try {
                 using var client = GetClient();
                 await client.ConnectAsync();
-                await client.UploadFileAsync(file, destination, FtpRemoteExists.Overwrite, true, FtpVerify.Retry);
+                return await client.UploadFileAsync(file, destination, FtpRemoteExists.Overwrite, true, FtpVerify.Retry) == FtpStatus.Success;
             } catch (Exception ex) {
                 ConsoleHelper.Error($"Не удалось отправить файл по ftp {ex}");
                 return false;
             }
-
-            return true;
         }
 
         private FtpClient GetClient() {

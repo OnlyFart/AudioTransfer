@@ -23,5 +23,3 @@ jobs:
       run: dotnet build --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
-    - name: .NET Core CLI
-      uses: baruchiro/github-actions@0.0.1

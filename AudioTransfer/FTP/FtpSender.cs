@@ -6,9 +6,9 @@ using FluentFTP;
 
 namespace AudioTransfer.FTP {
     public class FtpSender {
-        public readonly FtpConfig Config;
+        public readonly IFtpConfig Config;
 
-        public FtpSender(FtpConfig config) {
+        public FtpSender(IFtpConfig config) {
             Config = config;
         }
 

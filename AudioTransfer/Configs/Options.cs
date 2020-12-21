@@ -1,7 +1,7 @@
 using CommandLine;
 
 namespace AudioTransfer.Configs {
-    public class Options {
+    public class Options : IFFmpegConfig, IFtpConfig, IProcessorConfig {
         [Option('s', "source", Required = true, HelpText = "Исходная директория с файлами для конвертации")]
         public string Source { get; set; }
 

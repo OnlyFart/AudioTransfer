@@ -14,11 +14,11 @@ namespace AudioTransfer.Logic {
     public class Processor {
         private const string PROCESSED_FILENAME = "join.txt";
         
-        private readonly ProcessorConfig _config;
+        private readonly IProcessorConfig _config;
         private readonly FtpSender _ftpSender;
         private readonly FFmpegWrapper _fFmpegWrapper;
 
-        public Processor(ProcessorConfig config, FtpSender ftpSender, FFmpegWrapper fFmpegWrapper) {
+        public Processor(IProcessorConfig config, FtpSender ftpSender, FFmpegWrapper fFmpegWrapper) {
             _config = config;
             _ftpSender = ftpSender;
             _fFmpegWrapper = fFmpegWrapper;

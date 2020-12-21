@@ -12,9 +12,9 @@ namespace AudioTransfer.FFMPEG {
     /// Обертка на ffmpeg
     /// </summary>
     public class FFmpegWrapper {
-        public readonly FFmpegConfig Config;
+        public readonly IFFmpegConfig Config;
 
-        public FFmpegWrapper(FFmpegConfig config) {
+        public FFmpegWrapper(IFFmpegConfig config) {
             Config = config;
         }
 

@@ -1,28 +1,28 @@
 namespace AudioTransfer.Configs {
-    public class FFmpegConfig {
+    public interface IFFmpegConfig {
         /// <summary>
         /// Битрейт выходного файда
         /// </summary>
-        public int BitRate;
+        int BitRate { get; set; }
 
         /// <summary>
         /// Количество каналов выходного файла
         /// </summary>
-        public int ChannelsCount;
+        int ChannelsCount  { get; set; }
 
         /// <summary>
         /// Частота выходного файла
         /// </summary>
-        public int SampleRate;
+        int SampleRate  { get; set; }
 
         /// <summary>
         /// Выходное расширение файла
         /// </summary>
-        public string OutputExtension;
+        string OutputExtension  { get; set; }
 
         /// <summary>
         /// Путь к файлу ffmpeg
         /// </summary>
-        public string FFmpegPath;
+        string FFmpegPath  { get; set; }
     }
 }

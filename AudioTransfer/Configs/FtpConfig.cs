@@ -1,18 +1,18 @@
 namespace AudioTransfer.Configs {
-    public class FtpConfig {
+    public interface IFtpConfig {
         /// <summary>
         /// Адрес сервера для заливки файлов
         /// </summary>
-        public string FtpServer { get; set; }
+        string FtpServer { get; set; }
         
         /// <summary>
         /// Логин от ftp сервера
         /// </summary>
-        public string FtpLogin { get; set; }
+        string FtpLogin { get; set; }
         
         /// <summary>
         /// Пароль от ftp сервера
         /// </summary>
-        public string FtpPassword { get; set; }
+        string FtpPassword { get; set; }
     }
 }

@@ -2,7 +2,7 @@
 Для работы необходимо: 
 
 * [Net.core 3.1](https://dotnet.microsoft.com/download/dotnet-core/3.1) 
-* [ffmpeg](https://ffmpeg.org/)
+* [ffmpeg](https://ffmpeg.org/download.html)
 
 ## Пример вызова сервиса
 ```

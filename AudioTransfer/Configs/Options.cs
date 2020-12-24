@@ -22,8 +22,5 @@ namespace AudioTransfer.Configs {
         
         [Option("dl", Default = 60, Required = false, HelpText = "Задержка в секундах между итерациями")]
         public int DelaySeconds { get; set; }
-
-        [Option("oe", Default = "mp3", Required = false, HelpText = "Расширение выходного файла")]
-        public string OutputExtension { get; set; }
     }
 }

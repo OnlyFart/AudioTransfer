@@ -15,6 +15,8 @@ namespace AudioTransfer.Logic {
         private const string CONVERTED_FILENAME = "conv.txt";
         private const string REPORT_FILENAME = "report.txt";
 
+        private const string OUTPUT_EXTENSION = "mp3";
+
         public readonly IProcessorConfig Config;
         private readonly FFmpegWrapper _fFmpegWrapper;
 
@@ -107,9 +109,7 @@ namespace AudioTransfer.Logic {
         /// <returns></returns>
         private string GetOutputFileName(FileSystemInfo directory) {
             var outputDirectory = GetOutputDirectory(directory);
-                    
-            var extension = _fFmpegWrapper.Config.OutputExtension;
-            var outputFile = $"{directory.Name}_{extension.ToUpper()}WRAP.{extension.ToLower()}";
+            var outputFile = $"{directory.Name}_{OUTPUT_EXTENSION.ToUpper()}WRAP.{OUTPUT_EXTENSION.ToLower()}";
 
             return Path.Combine(outputDirectory, outputFile);
         }
@@ -122,7 +122,7 @@ namespace AudioTransfer.Logic {
         /// <returns></returns>
         private string GetOutputFileName(string file, FileSystemInfo directory) {
             var outputDirectory = GetOutputDirectory(directory);
-            var outputFile = $"{Path.GetFileNameWithoutExtension(file)}.{_fFmpegWrapper.Config.OutputExtension.ToLower()}";
+            var outputFile = $"{Path.GetFileNameWithoutExtension(file)}.{OUTPUT_EXTENSION.ToLower()}";
 
             return Path.Combine(outputDirectory, outputFile);
         }

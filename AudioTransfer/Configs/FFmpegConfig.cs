@@ -14,7 +14,5 @@ namespace AudioTransfer.Configs {
         /// Путь к файлу ffmpeg
         /// </summary>
         string FFmpegPath  { get; set; }
-        
-        public string OutputExtension { get; set; }
     }
 }

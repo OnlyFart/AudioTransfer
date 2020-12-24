@@ -40,7 +40,7 @@ namespace AudioTransfer.Utils {
         }
 
         private static string Format(string message) {
-            return $"{DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss")} - {message}";
+            return $"{DateTime.Now:dd.MM.yyyy HH:mm:ss} - {message}";
         }
     }
 }

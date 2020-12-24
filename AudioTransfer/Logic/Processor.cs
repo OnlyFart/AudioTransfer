@@ -153,7 +153,7 @@ namespace AudioTransfer.Logic {
         /// <param name="mode">Режим работы процессора</param>
         /// <returns></returns>
         private static bool NeedProcessDirectory(FileSystemInfo directory, out List<string> inputFiles, out ProcessorMode mode) {
-            ConsoleHelper.Info($"Начинаем обработку директории {directory.Name}");
+            ConsoleHelper.Info($"Начинаем обработку директории {directory.FullName}");
             
             inputFiles = default;
             mode = default;
@@ -182,7 +182,7 @@ namespace AudioTransfer.Logic {
             ConsoleHelper.Info($"Обрабатываем директорию {directory.FullName} в режиме {mode}");
 
             inputFiles = directoryFiles
-                .Where(f => f.Extension == ".mp3")
+                .Where(f => f.Extension == "." + OUTPUT_EXTENSION)
                 .OrderBy(f => f.Name)
                 .Select(t => t.FullName)
                 .ToList();

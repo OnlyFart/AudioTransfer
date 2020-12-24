@@ -78,17 +78,16 @@ namespace AudioTransfer.FFMPEG {
                 return false;
             }
         }
-        
+
         /// <summary>
-        /// 
+        /// Получение длительности файла
         /// </summary>
-        /// <param name="inputFiles"></param>
-        /// <param name="outputFile"></param>
+        /// <param name="file"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
         public async Task<string> GetFileDuration(string file) {
             try {
-                var arguments = $"-i {file}";
+                var arguments = $"-i {file.CoverQuotes()}";
 
                 var info = new ProcessStartInfo {
                     WindowStyle = ProcessWindowStyle.Hidden,

@@ -6,7 +6,7 @@
 
 ## Пример вызова сервиса
 ```
-audiotransfer --s D:\source --d D:\destination --th 5 --ff D:\ffmpeg.exe
+audiotransfer --s D:\source --d D:\destination --th 5 --ff D:\ffmpeg.exe --fp D:\ffprobe.exe
 ```
 
 ## Где 
@@ -14,6 +14,7 @@ audiotransfer --s D:\source --d D:\destination --th 5 --ff D:\ffmpeg.exe
 --s - папка, в которой лежат папки с файлами для конвертации; 
 --d - папка, в которую отправляются обработанные файлы;
 --ff - путь к ffmpeg
+--fp - путь к ffprobe
 --th - кол-во одновременно обрабатывающихся папок
 ```
 

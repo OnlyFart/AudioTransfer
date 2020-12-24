@@ -8,7 +8,7 @@ namespace AudioTransfer.Utils {
         public static void Info(string message) {
             lock (Locker) {
                 Console.OutputEncoding = Encoding.UTF8;
-                Console.WriteLine(message);
+                Console.WriteLine(Format(message));
             }
         }
         
@@ -16,7 +16,7 @@ namespace AudioTransfer.Utils {
             lock (Locker) {
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.OutputEncoding = Encoding.UTF8;
-                Console.Error.WriteLine(message);
+                Console.Error.WriteLine(Format(message));
                 Console.ResetColor();
             }
         }
@@ -25,7 +25,7 @@ namespace AudioTransfer.Utils {
             lock (Locker) {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.OutputEncoding = Encoding.UTF8;
-                Console.Error.WriteLine(message);
+                Console.Error.WriteLine(Format(message));
                 Console.ResetColor();
             }
         }
@@ -34,9 +34,13 @@ namespace AudioTransfer.Utils {
             lock (Locker) {
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.OutputEncoding = Encoding.UTF8;
-                Console.WriteLine(message);
+                Console.WriteLine(Format(message));
                 Console.ResetColor();
             }
+        }
+
+        private static string Format(string message) {
+            return $"{DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss")} - {message}";
         }
     }
 }

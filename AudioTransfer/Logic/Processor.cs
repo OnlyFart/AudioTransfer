@@ -53,11 +53,10 @@ namespace AudioTransfer.Logic {
                 var outputFileName = GetOutputFileName(directory);
                 if (await _fFmpegWrapper.Convert(inputFiles, outputFileName)) {
                     ConsoleHelper.Success($"Успешно обработали каталог {directory}");
+                    await CreateJoinReport(directory, inputFiles, outputFileName);
                 } else {
                     ConsoleHelper.Error($"Не удалось обработать файлы в директории {directory}");
                 }
-
-                await CreateJoinReport(directory, inputFiles, outputFileName);
             } else if (mode == ProcessorMode.Convert) {
                 var files = new List<Tuple<string, string>>();
                 

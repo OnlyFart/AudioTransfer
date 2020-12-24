@@ -2,10 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using AudioTransfer.Configs;
 using AudioTransfer.Extensions;
+using AudioTransfer.Types;
 using AudioTransfer.Utils;
+using Newtonsoft.Json;
 
 namespace AudioTransfer.FFMPEG {
     /// <summary>
@@ -80,21 +83,26 @@ namespace AudioTransfer.FFMPEG {
         }
 
         /// <summary>
-        /// Получение длительности файла
+        /// Получение информации об аудиофайле
         /// </summary>
         /// <param name="file"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public async Task<string> GetFileDuration(string file) {
+        public async Task<AudioFileFormat> GetFileFormat(string file) {
+            var result = new AudioFileFormat();
+            
             try {
-                var arguments = $"-i {file.CoverQuotes()}";
+                var arguments = $"-i {file.CoverQuotes()} -print_format json -show_format -v quiet";
 
                 var info = new ProcessStartInfo {
                     WindowStyle = ProcessWindowStyle.Hidden,
                     UseShellExecute = false,
                     FileName = Config.FFprobePath,
                     Arguments = arguments,
-                    RedirectStandardError = true
+                    RedirectStandardError = true,
+                    RedirectStandardOutput = true,
+                    StandardErrorEncoding = Encoding.UTF8,
+                    StandardOutputEncoding = Encoding.UTF8,
                 };
 
                 using var process = new Process {
@@ -102,21 +110,19 @@ namespace AudioTransfer.FFMPEG {
                     EnableRaisingEvents = true
                 };
                 process.Start();
+                
+                var sb = new StringBuilder();
 
-                var result = string.Empty;
-                while (!process.StandardError.EndOfStream) {
-                    var line = (await process.StandardError.ReadLineAsync()).Trim();
-                    var value = "Duration: ";
-                    if (line.StartsWith(value)) {
-                        result = line.Substring(value.Length, 8);
-                    }
+                while (!process.StandardOutput.EndOfStream) {
+                    sb.Append(await process.StandardOutput.ReadLineAsync());
                 }
 
+                result = JsonConvert.DeserializeObject<AudioFileFormat>(sb.ToString());
                 process.WaitForExit();
                 return result;
             } catch (Exception ex) {
                 ConsoleHelper.Error($"Не удалось обработать файл {ex}");
-                return string.Empty;
+                return result;
             }
         }
     }

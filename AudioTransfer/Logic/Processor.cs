@@ -103,13 +103,7 @@ namespace AudioTransfer.Logic {
         }
 
         private async Task<AudioFileInfo> GetFileInfo(string path) {
-            var info = new FileInfo(path);
-            
-            return new AudioFileInfo {
-                Path = path,
-                Duration = await _fFmpegWrapper.GetFileDuration(path),
-                Size = info.Length * 1.0 / 1024 / 1024
-            };
+            return (await _fFmpegWrapper.GetFileFormat(path)).Format;
         }
 
         /// <summary>

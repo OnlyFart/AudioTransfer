@@ -1,24 +1,29 @@
 using System;
 
 namespace AudioTransfer.Types {
+    public class AudioFileFormat {
+        public AudioFileInfo Format = new AudioFileInfo();
+    }
+    
     public class AudioFileInfo {
         /// <summary>
         /// Название файла
         /// </summary>
-        public string Path;
+        public string FileName;
 
         /// <summary>
         /// Длительность файла
         /// </summary>
-        public string Duration;
+        public double Duration;
 
         /// <summary>
         /// Размер файла
         /// </summary>
-        public double Size;
+        public decimal Size;
 
         public override string ToString() {
-            return $"{Path} ({Duration:hh\\:mm\\:ss}, {Size} MBytes)";
+            return $"{FileName} ({TimeSpan.FromSeconds(Duration):hh\\:mm\\:ss}, {Size / 1024 / 1024} MBytes)";
+            
         }
     }
 }

@@ -90,11 +90,11 @@ namespace AudioTransfer.Logic {
             var lines = new List<string>();
             
             foreach (var (inputFile, outputFile) in inputFiles) {
-                var inputInfo = await FileInfoGetter.GetFileInfo(inputFile);
-                var outputInfo = await FileInfoGetter.GetFileInfo(outputFile);
+                var inputInfo = FileInfoGetter.GetFileInfo(inputFile);
+                var outputInfo = FileInfoGetter.GetFileInfo(outputFile);
 
-                lines.Add($"- Конвертирование {inputInfo}");
-                lines.Add($"- Результат {outputInfo}");
+                lines.Add($"- Конвертирование {await inputInfo}");
+                lines.Add($"- Результат {await outputInfo}");
             }
 
             await File.WriteAllLinesAsync(Path.Combine(directory.FullName, REPORT_FILENAME), lines, Encoding.UTF8);

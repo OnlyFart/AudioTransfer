@@ -7,9 +7,15 @@ namespace AudioTransfer.Configs {
 
         [Option('d', "destination", Required = true, HelpText = "Результирующая директория для сохранения файлов")]
         public string Destination { get; set; }
-
+        
         [Option("ff", Required = true, HelpText = "Путь к ffmpeg")]
         public string FFmpegPath { get; set; }
+        
+        [Option("codec", Default = "libmp3lame", Required = false, HelpText = "Кодек")]
+        public string Codec { get; set; }
+        
+        [Option("qa", Default = 7, Required = false, HelpText = "Кодек")]
+        public int Quality { get; set; }
 
         [Option("th", Default = 1, Required = false, HelpText = "Количество потоков для обработки")]
         public int ThreadsCount { get; set; }
@@ -19,14 +25,5 @@ namespace AudioTransfer.Configs {
 
         [Option("oe", Default = "mp3", Required = false, HelpText = "Расширение выходного файла")]
         public string OutputExtension { get; set; }
-
-        [Option("ar", Default = 44100, Required = false, HelpText = "Частота выходного файла")]
-        public int SampleRate { get; set; }
-        
-        [Option("ac", Default = 2, Required = false, HelpText = "Количество каналов выходного файла. 1 - моно, 2 - стерео")]
-        public int ChannelsCount { get; set; }
-        
-        [Option("ba", Default = 192, Required = false, HelpText = "Битрейт выходного файла в килобайтах")]
-        public int BitRate { get; set; }
     }
 }

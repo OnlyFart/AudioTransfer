@@ -47,9 +47,8 @@ namespace AudioTransfer.FFMPEG {
                     .AppendThroughWhitespace("-filter_complex")
                     .AppendThroughWhitespace(string.Join(string.Empty, inputFiles.Select((_, i) => $"[{i}:a]")) + $"concat=n={inputFiles.Count}:v=0:a=1")
                     .AppendThroughWhitespace("-vn")
-                    .AppendThroughWhitespace($"-ar {Config.SampleRate}")
-                    .AppendThroughWhitespace($"-ac {Config.ChannelsCount}")
-                    .AppendThroughWhitespace($"-b:a {Config.BitRate}k")
+                    .AppendThroughWhitespace($"-codec:a {Config.Codec}")
+                    .AppendThroughWhitespace($"-q:a {Config.Quality}")
                     .AppendThroughWhitespace(outputFile.CoverQuotes());
 
                 var info = new ProcessStartInfo {

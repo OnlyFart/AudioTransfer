@@ -11,6 +11,9 @@ namespace AudioTransfer.Configs {
         [Option("ff", Required = true, HelpText = "Путь к ffmpeg")]
         public string FFmpegPath { get; set; }
         
+        [Option("fp", Required = true, HelpText = "Путь к ffprobe")]
+        public string FFprobePath { get; set; }
+
         [Option("codec", Default = "libmp3lame", Required = false, HelpText = "Кодек")]
         public string Codec { get; set; }
         

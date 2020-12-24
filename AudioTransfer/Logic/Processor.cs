@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using AudioTransfer.Configs;
 using AudioTransfer.FFMPEG;
+using AudioTransfer.Types;
 using AudioTransfer.Utils;
 
 namespace AudioTransfer.Logic {
@@ -74,32 +75,42 @@ namespace AudioTransfer.Logic {
             }
         }
 
-        private static async Task CreateJoinReport(FileSystemInfo directory, IEnumerable<string> inputFiles, string outputFile) {
+        private  async Task CreateJoinReport(FileSystemInfo directory, IEnumerable<string> inputFiles, string outputFile) {
             var lines = new List<string> {"Слияние:"};
             foreach (var file in inputFiles) {
-                var inputInfo = await FileInfoGetter.GetFileInfo(file);
+                var inputInfo = await GetFileInfo(file);
                 lines.Add($"- {inputInfo}");
             }
             
             lines.Add("Результат:");
-            var outputInfo = await FileInfoGetter.GetFileInfo(outputFile);
+            var outputInfo = await GetFileInfo(outputFile);
             lines.Add($"- {outputInfo}");
             
             await File.WriteAllLinesAsync(Path.Combine(directory.FullName, REPORT_FILENAME), lines, Encoding.UTF8);
         }
 
-        private static async Task CreateConvertReport(FileSystemInfo directory, IEnumerable<Tuple<string, string>> inputFiles) {
+        private async Task CreateConvertReport(FileSystemInfo directory, IEnumerable<Tuple<string, string>> inputFiles) {
             var lines = new List<string>();
             
             foreach (var (inputFile, outputFile) in inputFiles) {
-                var inputInfo = FileInfoGetter.GetFileInfo(inputFile);
-                var outputInfo = FileInfoGetter.GetFileInfo(outputFile);
+                var inputInfo = await GetFileInfo(inputFile);
+                var outputInfo = await GetFileInfo(outputFile);
 
-                lines.Add($"- Конвертирование {await inputInfo}");
-                lines.Add($"- Результат {await outputInfo}");
+                lines.Add($"- Конвертирование {inputInfo}");
+                lines.Add($"- Результат {outputInfo}");
             }
 
             await File.WriteAllLinesAsync(Path.Combine(directory.FullName, REPORT_FILENAME), lines, Encoding.UTF8);
+        }
+
+        private async Task<AudioFileInfo> GetFileInfo(string path) {
+            var info = new FileInfo(path);
+            
+            return new AudioFileInfo {
+                Path = path,
+                Duration = await _fFmpegWrapper.GetFileDuration(path),
+                Size = info.Length * 1.0 / 1024 / 1024
+            };
         }
 
         /// <summary>

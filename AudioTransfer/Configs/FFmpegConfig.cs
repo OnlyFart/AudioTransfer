@@ -14,5 +14,10 @@ namespace AudioTransfer.Configs {
         /// Путь к файлу ffmpeg
         /// </summary>
         string FFmpegPath  { get; set; }
+        
+        /// <summary>
+        /// Путь к файлу ffprobe
+        /// </summary>
+        string FFprobePath  { get; set; }
     }
 }

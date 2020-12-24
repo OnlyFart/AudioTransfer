@@ -16,12 +16,15 @@ namespace AudioTransfer {
                     var processor = kernel.Get<Processor>();
                     
                     while (true) {
+                        ConsoleHelper.Info("Начинаем итерацию");
+                        
                         try {
                             await processor.ProcessDirectory();
                         } catch (Exception ex) {
                             ConsoleHelper.Error(ex.ToString());
                         }
-
+                        
+                        ConsoleHelper.Info($"Итерация закончена. Следующий запуск через {processor.Config.DelaySeconds} секунд");
                         await Task.Delay(TimeSpan.FromSeconds(processor.Config.DelaySeconds));
                     }
                 });

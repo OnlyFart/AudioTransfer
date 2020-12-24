@@ -78,5 +78,47 @@ namespace AudioTransfer.FFMPEG {
                 return false;
             }
         }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="inputFiles"></param>
+        /// <param name="outputFile"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public async Task<string> GetFileDuration(string file) {
+            try {
+                var arguments = $"-i {file}";
+
+                var info = new ProcessStartInfo {
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    UseShellExecute = false,
+                    FileName = Config.FFprobePath,
+                    Arguments = arguments,
+                    RedirectStandardError = true
+                };
+
+                using var process = new Process {
+                    StartInfo = info,
+                    EnableRaisingEvents = true
+                };
+                process.Start();
+
+                var result = string.Empty;
+                while (!process.StandardError.EndOfStream) {
+                    var line = (await process.StandardError.ReadLineAsync()).Trim();
+                    var value = "Duration: ";
+                    if (line.StartsWith(value)) {
+                        result = line.Substring(value.Length, 8);
+                    }
+                }
+
+                process.WaitForExit();
+                return result;
+            } catch (Exception ex) {
+                ConsoleHelper.Error($"Не удалось обработать файл {ex}");
+                return string.Empty;
+            }
+        }
     }
 }

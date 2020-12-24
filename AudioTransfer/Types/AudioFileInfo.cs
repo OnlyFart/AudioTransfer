@@ -10,7 +10,7 @@ namespace AudioTransfer.Types {
         /// <summary>
         /// Длительность файла
         /// </summary>
-        public TimeSpan Duration;
+        public string Duration;
 
         /// <summary>
         /// Размер файла

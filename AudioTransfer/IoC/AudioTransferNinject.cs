@@ -12,7 +12,6 @@ namespace AudioTransfer.IoC {
         public override void Load() {
             Bind<IFFmpegConfig>().ToConstant((IFFmpegConfig)_options);
             Bind<IProcessorConfig>().ToConstant((IProcessorConfig)_options);
-            Bind<IFtpConfig>().ToConstant((IFtpConfig)_options);
         }
     }
 }

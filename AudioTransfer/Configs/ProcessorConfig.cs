@@ -5,5 +5,19 @@ namespace AudioTransfer.Configs {
         /// </summary>
         int ThreadsCount { get; set; }
         
+        /// <summary>
+        /// Исходная директория с файлами для конвертации
+        /// </summary>
+        string Source { get; set; }
+        
+        /// <summary>
+        /// Результирующая директория для сохранения файлов
+        /// </summary>
+        string Destination { get; set; }
+        
+        /// <summary>
+        /// Задержка в секундах между итерациями
+        /// </summary>
+        int DelaySeconds { get; set; }
     }
 }

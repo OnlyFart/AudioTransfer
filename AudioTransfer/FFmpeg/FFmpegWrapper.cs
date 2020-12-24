@@ -17,6 +17,17 @@ namespace AudioTransfer.FFMPEG {
         public FFmpegWrapper(IFFmpegConfig config) {
             Config = config;
         }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="inputFile"></param>
+        /// <param name="outputFile"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public async Task<bool> Convert(string inputFile, string outputFile) {
+            return await Convert(new List<string>{inputFile}, outputFile);
+        }
 
         /// <summary>
         /// 

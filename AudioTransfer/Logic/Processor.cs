@@ -25,7 +25,11 @@ namespace AudioTransfer.Logic {
             Config = config;
             _fFmpegWrapper = fFmpegWrapper;
         }
-
+        
+        /// <summary>
+        /// Рекурсивная обработка исходной директории
+        /// </summary>
+        /// <returns></returns>
         public async Task ProcessDirectory() {
             var slim = new SemaphoreSlim(Config.ThreadsCount, Config.ThreadsCount);
             
@@ -47,7 +51,14 @@ namespace AudioTransfer.Logic {
                 }
             }));
         }
-
+        
+        /// <summary>
+        /// Обработка конкретной папки
+        /// </summary>
+        /// <param name="directory">Директория</param>
+        /// <param name="mode">Режим обработки файлов</param>
+        /// <param name="inputFiles">Входящие файлы</param>
+        /// <returns></returns>
         private async Task Process(FileSystemInfo directory, ProcessorMode mode, List<string> inputFiles) {
             if (mode == ProcessorMode.Join) {
                 var outputFileName = GetOutputFileName(directory);
@@ -73,35 +84,48 @@ namespace AudioTransfer.Logic {
                 await CreateConvertReport(directory, files);
             }
         }
-
+        
+        /// <summary>
+        /// Создание отчета по склеиванию файлов
+        /// </summary>
+        /// <param name="directory"></param>
+        /// <param name="inputFiles"></param>
+        /// <param name="outputFile"></param>
+        /// <returns></returns>
         private  async Task CreateJoinReport(FileSystemInfo directory, IEnumerable<string> inputFiles, string outputFile) {
             var lines = new List<string> {"Слияние:"};
             foreach (var file in inputFiles) {
-                var inputInfo = await GetFileInfo(file);
-                lines.Add($"- {inputInfo}");
+                lines.Add($"- {await GetFileInfo(file)}");
             }
             
             lines.Add("Результат:");
-            var outputInfo = await GetFileInfo(outputFile);
-            lines.Add($"- {outputInfo}");
+            lines.Add($"- {await GetFileInfo(outputFile)}");
             
             await File.WriteAllLinesAsync(Path.Combine(directory.FullName, REPORT_FILENAME), lines, Encoding.UTF8);
         }
-
+        
+        /// <summary>
+        /// Созлание отчета по конвертации файлов
+        /// </summary>
+        /// <param name="directory"></param>
+        /// <param name="inputFiles"></param>
+        /// <returns></returns>
         private async Task CreateConvertReport(FileSystemInfo directory, IEnumerable<Tuple<string, string>> inputFiles) {
             var lines = new List<string>();
             
             foreach (var (inputFile, outputFile) in inputFiles) {
-                var inputInfo = await GetFileInfo(inputFile);
-                var outputInfo = await GetFileInfo(outputFile);
-
-                lines.Add($"- Конвертирование {inputInfo}");
-                lines.Add($"- Результат {outputInfo}");
+                lines.Add($"- Конвертирование {await GetFileInfo(inputFile)}");
+                lines.Add($"- Результат {await GetFileInfo(outputFile)}");
             }
 
             await File.WriteAllLinesAsync(Path.Combine(directory.FullName, REPORT_FILENAME), lines, Encoding.UTF8);
         }
-
+        
+        /// <summary>
+        /// Получение информации об аудиофайле
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         private async Task<AudioFileInfo> GetFileInfo(string path) {
             return (await _fFmpegWrapper.GetFileFormat(path)).Format;
         }

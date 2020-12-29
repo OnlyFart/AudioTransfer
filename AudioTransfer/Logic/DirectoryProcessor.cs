@@ -10,6 +10,9 @@ using AudioTransfer.Types;
 using AudioTransfer.Utils;
 
 namespace AudioTransfer.Logic {
+    /// <summary>
+    /// Обработчик директорий
+    /// </summary>
     public class DirectoryProcessor {
         private readonly Dictionary<string, FileProcessorBase> _fileToProcessorMap;
 

@@ -8,8 +8,20 @@ using AudioTransfer.Types;
 using AudioTransfer.Utils;
 
 namespace AudioTransfer.Logic.FileProcessor {
+    /// <summary>
+    /// Процессор для склеивания файлов
+    /// </summary>
     public class JoinFileProcessor : FileProcessorBase {
+        public override string FileName => "join.txt";
+        
         public JoinFileProcessor(IProcessorConfig config, FFmpegWrapper fFmpegWrapper) : base(config, fFmpegWrapper) { }
+        
+        /// <summary>
+        /// Обработка конкретной папки
+        /// </summary>
+        /// <param name="directory">Директория</param>
+        /// <param name="inputFiles">Входящие файлы</param>
+        /// <returns></returns>
         public override async Task Process(FileSystemInfo directory, List<string> inputFiles) {
             var outputFileName = GetOutputFileName(directory);
             if (await _fFmpegWrapper.Convert(inputFiles, outputFileName)) {
@@ -19,8 +31,18 @@ namespace AudioTransfer.Logic.FileProcessor {
                 ConsoleHelper.Error($"Не удалось обработать файлы в директории {directory}");
             }
         }
+        
+        /// <summary>
+        /// Получение результируюшего пути для сохранения файлов с созданием дерева каталогов
+        /// </summary>
+        /// <param name="directory"></param>
+        /// <returns></returns>
+        private string GetOutputFileName(FileSystemInfo directory) {
+            var outputDirectory = GetOutputDirectory(directory);
+            var outputFile = $"{directory.Name}_{Const.OUTPUT_EXTENSION.ToUpper()}WRAP.{Const.OUTPUT_EXTENSION.ToLower()}";
 
-        public override string FileName => "join.txt";
+            return Path.Combine(outputDirectory, outputFile);
+        }
 
         /// <summary>
         /// Создание отчета по склеиванию файлов

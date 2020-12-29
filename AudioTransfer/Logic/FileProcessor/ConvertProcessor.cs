@@ -9,8 +9,20 @@ using AudioTransfer.Types;
 using AudioTransfer.Utils;
 
 namespace AudioTransfer.Logic.FileProcessor {
+    /// <summary>
+    /// Процессор для конвертации отдельных файлов
+    /// </summary>
     public class ConvertFileProcessor : FileProcessorBase {
+        public override string FileName => "conv.txt";
+        
         public ConvertFileProcessor(IProcessorConfig config, FFmpegWrapper fFmpegWrapper) : base(config, fFmpegWrapper) { }
+        
+        /// <summary>
+        /// Обработка конкретной папки
+        /// </summary>
+        /// <param name="directory">Директория</param>
+        /// <param name="inputFiles">Входящие файлы</param>
+        /// <returns></returns>
         public override async Task Process(FileSystemInfo directory, List<string> inputFiles) {
             var files = new List<Tuple<string, string>>();
                 
@@ -27,7 +39,18 @@ namespace AudioTransfer.Logic.FileProcessor {
             await CreateConvertReport(directory, files);
         }
         
-        public override string FileName => "conv.txt";
+        /// <summary>
+        /// Получение результируюшего пути для сохранения файлов с созданием дерева каталогов
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="directory"></param>
+        /// <returns></returns>
+        private string GetOutputFileName(string file, FileSystemInfo directory) {
+            var outputDirectory = GetOutputDirectory(directory);
+            var outputFile = $"{Path.GetFileNameWithoutExtension(file)}.{Const.OUTPUT_EXTENSION.ToLower()}";
+
+            return Path.Combine(outputDirectory, outputFile);
+        }
 
         /// <summary>
         /// Созлание отчета по конвертации файлов

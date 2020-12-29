@@ -13,7 +13,7 @@ namespace AudioTransfer {
             await Parser.Default.ParseArguments<Options>(args)
                 .WithParsedAsync(async options => {
                     var kernel = new StandardKernel(new AudioTransferNinject(options));
-                    var processor = kernel.Get<Processor>();
+                    var processor = kernel.Get<DirectoryProcessor>();
                     
                     while (true) {
                         ConsoleHelper.Info("Начинаем итерацию");

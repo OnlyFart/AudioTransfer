@@ -22,7 +22,7 @@ namespace AudioTransfer.Types {
         public decimal Size;
 
         public override string ToString() {
-            return $"{FileName} ({TimeSpan.FromSeconds(Duration):hh\\:mm\\:ss}, {Size / 1024 / 1024} MBytes)";
+            return $"{FileName} ({TimeSpan.FromSeconds(Duration):hh\\:mm\\:ss}, {(Size / 1024 / 1024):#.##} MBytes)";
             
         }
     }

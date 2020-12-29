@@ -1,4 +1,5 @@
 using AudioTransfer.Configs;
+using AudioTransfer.Logic.FileProcessor;
 using Ninject.Modules;
 
 namespace AudioTransfer.IoC {
@@ -12,6 +13,8 @@ namespace AudioTransfer.IoC {
         public override void Load() {
             Bind<IFFmpegConfig>().ToConstant((IFFmpegConfig)_options);
             Bind<IProcessorConfig>().ToConstant((IProcessorConfig)_options);
+            Bind<FileProcessorBase>().To<ConvertFileProcessor>().InSingletonScope();
+            Bind<FileProcessorBase>().To<JoinFileProcessor>().InSingletonScope();
         }
     }
 }

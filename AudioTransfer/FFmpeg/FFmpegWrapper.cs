@@ -10,7 +10,7 @@ using AudioTransfer.Types;
 using AudioTransfer.Utils;
 using Newtonsoft.Json;
 
-namespace AudioTransfer.FFMPEG {
+namespace AudioTransfer.FFmpeg {
     /// <summary>
     /// Обертка на ffmpeg
     /// </summary>
@@ -88,7 +88,7 @@ namespace AudioTransfer.FFMPEG {
         /// <param name="file"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public async Task<AudioFileFormat> GetFileFormat(string file) {
+        public async Task<AudioFileInfo> GetFileFormat(string file) {
             var result = new AudioFileFormat();
             
             try {
@@ -119,10 +119,10 @@ namespace AudioTransfer.FFMPEG {
 
                 result = JsonConvert.DeserializeObject<AudioFileFormat>(sb.ToString());
                 process.WaitForExit();
-                return result;
+                return result.Format;
             } catch (Exception ex) {
                 ConsoleHelper.Error($"Не удалось обработать файл {ex}");
-                return result;
+                return result.Format;
             }
         }
     }

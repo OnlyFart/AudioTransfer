@@ -23,7 +23,7 @@ namespace AudioTransfer.Logic.FileProcessor {
         /// <param name="directory">Директория</param>
         /// <param name="inputFiles">Входящие файлы</param>
         /// <returns></returns>
-        public override async Task Process(FileSystemInfo directory, List<string> inputFiles) {
+        public override async Task Process(FileSystemInfo directory, IReadOnlyCollection<string> inputFiles) {
             var files = new List<Tuple<string, string>>();
                 
             foreach (var inputFile in inputFiles) {

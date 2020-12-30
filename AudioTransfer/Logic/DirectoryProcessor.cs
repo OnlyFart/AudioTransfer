@@ -20,10 +20,7 @@ namespace AudioTransfer.Logic {
 
         public DirectoryProcessor(IEnumerable<FileProcessorBase> processors, IProcessorConfig config) {
             Config = config;
-            _fileToProcessorMap = new Dictionary<string, FileProcessorBase>(StringComparer.InvariantCultureIgnoreCase);
-            foreach (var processor in processors) {
-                _fileToProcessorMap.Add(processor.FileName, processor);
-            }
+            _fileToProcessorMap = processors.ToDictionary(p => p.FileName, p => p, StringComparer.InvariantCultureIgnoreCase);
         }
         
         /// <summary>
@@ -33,7 +30,7 @@ namespace AudioTransfer.Logic {
         public async Task ProcessDirectory() {
             var slim = new SemaphoreSlim(Config.ThreadsCount, Config.ThreadsCount);
             
-            var directories = Directory.GetDirectories(Config.Source, "*", SearchOption.AllDirectories).Select(d => new FileInfo(d)).ToList();
+            var directories = Directory.GetDirectories(Config.Source, "*", SearchOption.AllDirectories).Select(d => new FileInfo(d));
 
             await Task.WhenAll(directories.Select(async directory => {
                 await slim.WaitAsync();
@@ -57,7 +54,7 @@ namespace AudioTransfer.Logic {
         /// <param name="directory">Директория</param>
         /// <param name="fileProcessor">Процессор</param>
         /// <returns></returns>
-        private bool NeedProcessDirectory(FileSystemInfo directory, out List<string> inputFiles, out FileProcessorBase fileProcessor) {
+        private bool NeedProcessDirectory(FileSystemInfo directory, out IReadOnlyCollection<string> inputFiles, out FileProcessorBase fileProcessor) {
             ConsoleHelper.Info($"Начинаем обработку директории {directory.FullName}");
             
             inputFiles = default;

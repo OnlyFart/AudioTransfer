@@ -15,10 +15,10 @@ namespace AudioTransfer.FFmpeg {
     /// Обертка на ffmpeg
     /// </summary>
     public class FFmpegWrapper {
-        public readonly IFFmpegConfig Config;
+        private readonly IFFmpegConfig _config;
 
         public FFmpegWrapper(IFFmpegConfig config) {
-            Config = config;
+            _config = config;
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace AudioTransfer.FFmpeg {
         /// <param name="outputFile"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public async Task<bool> Convert(List<string> inputFiles, string outputFile) {
+        public async Task<bool> Convert(IReadOnlyCollection<string> inputFiles, string outputFile) {
             try {
                 if (inputFiles.Count == 0) {
                     return false;
@@ -50,14 +50,14 @@ namespace AudioTransfer.FFmpeg {
                     .AppendThroughWhitespace("-filter_complex")
                     .AppendThroughWhitespace(string.Join(string.Empty, inputFiles.Select((_, i) => $"[{i}:a]")) + $"concat=n={inputFiles.Count}:v=0:a=1")
                     .AppendThroughWhitespace("-vn")
-                    .AppendThroughWhitespace($"-codec:a {Config.Codec}")
-                    .AppendThroughWhitespace($"-q:a {Config.Quality}")
+                    .AppendThroughWhitespace($"-codec:a {_config.Codec}")
+                    .AppendThroughWhitespace($"-q:a {_config.Quality}")
                     .AppendThroughWhitespace(outputFile.CoverQuotes());
 
                 var info = new ProcessStartInfo {
                     WindowStyle = ProcessWindowStyle.Hidden,
                     UseShellExecute = false,
-                    FileName = Config.FFmpegPath,
+                    FileName = _config.FFmpegPath,
                     Arguments = arguments
                 };
                 
@@ -97,7 +97,7 @@ namespace AudioTransfer.FFmpeg {
                 var info = new ProcessStartInfo {
                     WindowStyle = ProcessWindowStyle.Hidden,
                     UseShellExecute = false,
-                    FileName = Config.FFprobePath,
+                    FileName = _config.FFprobePath,
                     Arguments = arguments,
                     RedirectStandardError = true,
                     RedirectStandardOutput = true,

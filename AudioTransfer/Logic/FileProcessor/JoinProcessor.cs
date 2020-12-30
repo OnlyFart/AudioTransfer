@@ -22,7 +22,7 @@ namespace AudioTransfer.Logic.FileProcessor {
         /// <param name="directory">Директория</param>
         /// <param name="inputFiles">Входящие файлы</param>
         /// <returns></returns>
-        public override async Task Process(FileSystemInfo directory, List<string> inputFiles) {
+        public override async Task Process(FileSystemInfo directory, IReadOnlyCollection<string> inputFiles) {
             var outputFileName = GetOutputFileName(directory);
             if (await _fFmpegWrapper.Convert(inputFiles, outputFileName)) {
                 ConsoleHelper.Success($"Успешно обработали каталог {directory}");

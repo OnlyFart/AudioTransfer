@@ -3,7 +3,6 @@ using System.IO;
 using System.Threading.Tasks;
 using AudioTransfer.Configs;
 using AudioTransfer.FFmpeg;
-using AudioTransfer.Types;
 
 namespace AudioTransfer.Logic.FileProcessor {
     public abstract class FileProcessorBase {
@@ -23,7 +22,7 @@ namespace AudioTransfer.Logic.FileProcessor {
         /// <param name="directory">Директория</param>
         /// <param name="inputFiles">Входящие файлы</param>
         /// <returns></returns>
-        public abstract Task Process(FileSystemInfo directory, List<string> inputFiles);
+        public abstract Task Process(FileSystemInfo directory, IReadOnlyCollection<string> inputFiles);
 
         /// <summary>
         /// Создание результирующей папки

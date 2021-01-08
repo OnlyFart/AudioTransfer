@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace AudioTransfer.Configs {
     public interface IProcessorConfig {
         /// <summary>
@@ -19,5 +21,10 @@ namespace AudioTransfer.Configs {
         /// Задержка в секундах между итерациями
         /// </summary>
         int DelaySeconds { get; set; }
+        
+        /// <summary>
+        /// Поддерживаемые расширения для обработки
+        /// </summary>
+        IList<string> SupportExtensions { get; set; }
     }
 }

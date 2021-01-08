@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using CommandLine;
 
 namespace AudioTransfer.Configs {
@@ -25,5 +26,8 @@ namespace AudioTransfer.Configs {
         
         [Option("dl", Default = 60, Required = false, HelpText = "Задержка в секундах между итерациями")]
         public int DelaySeconds { get; set; }
+   
+        [Option("se", Default = new[]{"mp3"}, Separator = ',', Required = false, HelpText = "Поддерживаемые расширения для обработки")]
+        public IList<string> SupportExtensions { get; set; }
     }
 }

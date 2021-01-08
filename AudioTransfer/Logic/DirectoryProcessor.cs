@@ -80,7 +80,7 @@ namespace AudioTransfer.Logic {
             ConsoleHelper.Info($"Обрабатываем директорию {directory.FullName} в режиме {fileProcessor.FileName}");
 
             inputFiles = directoryFiles
-                .Where(f => f.Extension == "." + Const.OUTPUT_EXTENSION)
+                .Where(f => Config.SupportExtensions.Any(e => string.Equals(f.Extension, "." + e, StringComparison.InvariantCultureIgnoreCase)))
                 .OrderBy(f => f.Name)
                 .Select(t => t.FullName)
                 .ToList();

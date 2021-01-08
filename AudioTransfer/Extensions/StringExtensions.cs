@@ -6,7 +6,7 @@ namespace AudioTransfer.Extensions {
         /// <param name="str"></param>
         /// <returns></returns>
         public static string CoverQuotes(this string str) {
-            return "\"" + str + "\"";
+            return $"\"{str}\"";
         }
         
         /// <summary>
@@ -16,7 +16,7 @@ namespace AudioTransfer.Extensions {
         /// <param name="append"></param>
         /// <returns></returns>
         public static string AppendThroughWhitespace(this string str, string append) {
-            return str + " " + append;
+            return $"{str} {append}";
         }
     }
 }

@@ -2,7 +2,7 @@ using System;
 
 namespace AudioTransfer.Types {
     public class AudioFileFormat {
-        public AudioFileInfo Format = new AudioFileInfo();
+        public readonly AudioFileInfo Format = new AudioFileInfo();
     }
     
     public class AudioFileInfo {
@@ -22,8 +22,7 @@ namespace AudioTransfer.Types {
         public decimal Size;
 
         public override string ToString() {
-            return $"{FileName} ({TimeSpan.FromSeconds(Duration):hh\\:mm\\:ss}, {(Size / 1024 / 1024):#.##} MBytes)";
-            
+            return $"{FileName} ({TimeSpan.FromSeconds(Duration):hh\\:mm\\:ss}, {Size / 1024 / 1024:#.##} MBytes)";
         }
     }
 }
